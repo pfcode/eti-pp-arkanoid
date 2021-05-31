@@ -1,7 +1,6 @@
 #ifndef _RENDER_H_
 #define _RENDER_H_
 
-#include <SDL2/SDL.h>
 #include "map.h"
 #include "defines.h"
 

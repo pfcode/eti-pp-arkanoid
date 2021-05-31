@@ -1,7 +1,6 @@
 #ifndef _MAP_H_
 #define _MAP_H_
 
-#include <SDL2/SDL.h>
 #include "defines.h"
 
 struct Ball{

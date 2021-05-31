@@ -1,23 +1,38 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <iostream>
-#include <string.h>
+#include <cstring>
+#include <string>
 #include "map.h"
-
-#define PI 3.14
 
 using namespace std;
 
 Map::Map(){
-    for(int i=0; i<BLOCKS_W; i++)
+    for(int i=0; i<BLOCKS_W; i++){
         for(int j=0; j<BLOCKS_H; j++){
             block[i][j] = (Block *)malloc(sizeof(Block));
             block[i][j]->type = 0;
         }
+    }
 
-    palette = (Palette *)malloc(sizeof(Palette));
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        entity[i] = nullptr;
+    }
+
+    for (int i = 0; i < MAX_AWARDS; i++) {
+        award[i] = nullptr;
+    }
+
+    for (int i = 0; i < MAX_BALLS; i++) {
+        ball[i] = nullptr;
+    }
+
+    palette = (Palette *) malloc(sizeof(Palette));
+    for(int i = 0; i < MAX_BALLS; i++) {
+        palette->dockedBalls[i] = nullptr;
+    }
 
     lose = false;
     levelAmount = 0;
@@ -38,15 +53,19 @@ void Map::resetVariables(){
     lives = LIVES;
     points = 0;
     blockAmount = 0;
-    level = NULL;
+    level = nullptr;
     maxLives = LIVES;
     stickyPalette = false;
-    for(int i=0; i< MAX_ENTITIES; i++){
-        delete entity[i];
-        entity[i] = NULL;
+
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        if (entity[i] != nullptr) {
+            delete entity[i];
+            entity[i] = nullptr;
+        }
     }
-    for(int i=0; i< MAX_AWARDS; i++){
-        if(award[i]){
+
+    for (int i = 0; i < MAX_AWARDS; i++) {
+        if (award[i] != nullptr) {
             award[i]->duration = -1;
             calcAward(i);
         }
@@ -69,6 +88,13 @@ bool Map::loadMap(const char* path){
         if(s.find("LEVEL") == 0){
             Level *l;
             l = (Level *)malloc(sizeof(Level));
+            l->nextLevel = nullptr;
+            l->blockAmount = 0;
+            for (int i = 0; i < BLOCKS_H; i++) {
+                for (int j = 0; j < BLOCKS_W; j++) {
+                    l->block[i][j] = nullptr;
+                }
+            }
             for(int i=0; i<BLOCKS_H; i++){
                 if(!getline(file, s))
                     return false;
@@ -88,6 +114,7 @@ bool Map::loadMap(const char* path){
             if(levelAmount == 0){
                 level = (Level *)malloc(sizeof(Level));
                 level->nextLevel = l;
+                level->blockAmount = 0;
             } else{
                 prevLevel->nextLevel = l;
             }
@@ -102,11 +129,13 @@ bool Map::loadMap(const char* path){
 
 bool Map::nextLevel(){
     if(level->nextLevel){
-        for(int i=0; i<BLOCKS_W; i++)
+        for(int i=0; i<BLOCKS_W; i++) {
             for(int j=0; j<BLOCKS_H; j++){
                 block[i][j] = (Block *)malloc(sizeof(Block));
                 memcpy(block[i][j], level->nextLevel->block[i][j], sizeof(Block));
             }
+        }
+
         blockAmount = level->nextLevel->blockAmount;
 
         // Reset balls
@@ -117,11 +146,14 @@ bool Map::nextLevel(){
 
         // Reset entities
         for(int i=0; i< MAX_ENTITIES; i++){
-            delete entity[i];
-            entity[i] = NULL;
+            if(entity[i] != nullptr) {
+                delete entity[i];
+                entity[i] = nullptr;
+            }
         }
+
         for(int i=0; i< MAX_AWARDS; i++){
-            if(award[i]){
+            if(award[i] != nullptr){
                 award[i]->duration = -1;
                 calcAward(i);
             }
@@ -137,15 +169,20 @@ bool Map::nextLevel(){
 }
 
 void Map::restartLevel(){
-    for(int i=0; i<BLOCKS_W; i++)
+    for(int i=0; i<BLOCKS_W; i++){
         for(int j=0; j<BLOCKS_H; j++){
             block[i][j] = (Block *)malloc(sizeof(Block));
             memcpy(block[i][j], level->block[i][j], sizeof(Block));
         }
+    }
+
     blockAmount = level->blockAmount;
 
     for(int i=0; i<MAX_BALLS; i++)
+    {
         removeBall(i);
+    }
+
     balls = 0;
     createBall(0, true);
 
@@ -175,7 +212,7 @@ void Map::createBall(int type, bool docked){
         ball[n]->y = fieldBreakpoint - BALL_H;
         ball[n]->type = type;
     }
-    ball[n]->angle = -1.0 * (random() % 40 + 30)/100.0;
+    ball[n]->angle = -1.0 * (rand() % 40 + 30)/100.0;
     ball[n]->speed = BALL_SPEED;
 
 
@@ -199,12 +236,12 @@ void Map::removeBall(int n){
     if(ball[n]){
         for(int i=0; i<MAX_BALLS; i++){
             if(palette->dockedBalls[i] && palette->dockedBalls[i] == ball[n]){
-                palette->dockedBalls[i] = NULL;
+                palette->dockedBalls[i] = nullptr;
             }
         }
 
         delete(ball[n]);
-        ball[n] = NULL;
+        ball[n] = nullptr;
         balls--;
     }
 }
@@ -214,8 +251,8 @@ void Map::undockBalls(){
     for(int i=0; i<MAX_BALLS; i++){
         if(palette->dockedBalls[i]){
             palette->dockedBalls[i]->speed = BALL_SPEED;
-            palette->dockedBalls[i]->angle = -1.0 * (random() % 40 + 30)/100.0;
-            palette->dockedBalls[i] = NULL;
+            palette->dockedBalls[i]->angle = -1.0 * (rand() % 40 + 30)/100.0;
+            palette->dockedBalls[i] = nullptr;
         }
     }
 }
@@ -224,7 +261,7 @@ Block* Map::getBlock(int x, int y){
     if(x>=0 && x<BLOCKS_W && y>=0 && y<BLOCKS_H){
         return block[x][y];
     } else{
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -279,7 +316,7 @@ Ball* Map::getBall(int n){
     if(n>=0 && n<MAX_BALLS && ball[n]){
         return ball[n];
     }
-    return NULL;
+    return nullptr;
 }
 
 // Top or bottom collision
@@ -456,7 +493,7 @@ void Map::calcAward(int n){
                     break;
             }
             delete award[n];
-            award[n] = NULL;
+            award[n] = nullptr;
         }
     }
 }
@@ -551,7 +588,7 @@ void Map::setLives(int _lives){
 
 int Map::createAward(int x, int y, char type, char icon){
     for(int i=0; i< MAX_ENTITIES; i++){
-        if(!entity[i]){
+        if(entity[i] != nullptr){
             entity[i] = (Entity *)malloc(sizeof(Entity));
             entity[i]->type = type;
             entity[i]->x = x;
@@ -560,11 +597,13 @@ int Map::createAward(int x, int y, char type, char icon){
             return i;
         }
     }
+
+    return -1;
 }
 
 void Map::removeEntity(int n){
     delete entity[n];
-    entity[n] = NULL;
+    entity[n] = nullptr;
 }
 
 Entity* Map::getEntity(int n){

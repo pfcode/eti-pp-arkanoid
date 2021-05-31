@@ -1,7 +1,6 @@
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
 #include <string>
-#include <iostream>
-#include <string.h>
 #include "render.h"
 
 using namespace std;
@@ -93,7 +92,7 @@ bool Render::loadResources(){
             r.y = j*backgroundTile->h;
             r.w = backgroundTile->w;
             r.h = backgroundTile->h;
-            SDL_BlitSurface(backgroundTile, NULL, background, &r);
+            SDL_BlitSurface(backgroundTile, nullptr, background, &r);
         }
 
     parseTileset(tileset);
@@ -111,7 +110,7 @@ void Render::parseTileset(SDL_Surface *_tileset){
             cut.w = BLOCK_W;
             cut.h = BLOCK_H;
             blockBitmap[i*8 + j] = SDL_CreateRGBSurface(0, cut.w, cut.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-            SDL_BlitSurface(_tileset, &cut, blockBitmap[i*8 + j], NULL);
+            SDL_BlitSurface(_tileset, &cut, blockBitmap[i*8 + j], nullptr);
         }
     }
 
@@ -124,7 +123,7 @@ void Render::parseTileset(SDL_Surface *_tileset){
             cut.w = BALL_W;
             cut.h = BALL_H;
             ballBitmap[i*2 + j] = SDL_CreateRGBSurface(0, cut.w, cut.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-            SDL_BlitSurface(_tileset, &cut, ballBitmap[i*2 + j], NULL);
+            SDL_BlitSurface(_tileset, &cut, ballBitmap[i*2 + j], nullptr);
         }
     }
 
@@ -137,7 +136,7 @@ void Render::parseTileset(SDL_Surface *_tileset){
             cut.w = PALETTE_SW;
             cut.h = PALETTE_SH;
             paletteBitmap[i*2 + j] = SDL_CreateRGBSurface(0, cut.w, cut.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-            SDL_BlitSurface(_tileset, &cut, paletteBitmap[i*2 + j], NULL);
+            SDL_BlitSurface(_tileset, &cut, paletteBitmap[i*2 + j], nullptr);
         }
     }
 
@@ -150,7 +149,7 @@ void Render::parseTileset(SDL_Surface *_tileset){
             cut.w = PALETTE_BW;
             cut.h = PALETTE_BH;
             paletteBitmap[i*2 + j + 4] = SDL_CreateRGBSurface(0, cut.w, cut.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-            SDL_BlitSurface(_tileset, &cut, paletteBitmap[i*2 + j + 4], NULL);
+            SDL_BlitSurface(_tileset, &cut, paletteBitmap[i*2 + j + 4], nullptr);
         }
     }
 
@@ -162,7 +161,7 @@ void Render::parseTileset(SDL_Surface *_tileset){
         cut.w = ICON_W;
         cut.h = ICON_H;
         iconBitmap[i] = SDL_CreateRGBSurface(0, cut.w, cut.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-        SDL_BlitSurface(_tileset, &cut, iconBitmap[i], NULL);
+        SDL_BlitSurface(_tileset, &cut, iconBitmap[i], nullptr);
     }
 }
 
@@ -174,11 +173,11 @@ void Render::drawSurface(SDL_Surface *src, int x, int y){
     dest.y = y;
     dest.w = src->w;
     dest.h = src->h;
-    SDL_BlitSurface(src, NULL, screen, &dest);
+    SDL_BlitSurface(src, nullptr, screen, &dest);
 }
 
 void Render::drawFrame(){
-    SDL_BlitSurface(background, NULL, screen, &fieldBG);
+    SDL_BlitSurface(background, nullptr, screen, &fieldBG);
     for(int i=0; i<BLOCKS_W+2; i++){
         for(int j=0; j<rows; j++){
             // Borders
@@ -244,8 +243,8 @@ void Render::calcFPS(){
 }
 
 void Render::flip(){
-    SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
-    SDL_RenderCopy(renderer, scrtex, NULL, NULL);
+    SDL_UpdateTexture(scrtex, nullptr, screen->pixels, screen->pitch);
+    SDL_RenderCopy(renderer, scrtex, nullptr, nullptr);
     SDL_RenderPresent(renderer);
 }
 
@@ -318,7 +317,7 @@ bool Render::dialogYesNo(const char *caption){
     int colorN = 0xAA8888;
     flip();
     while(!choose){
-        const Uint8 *keys = SDL_GetKeyboardState(NULL);
+        const Uint8 *keys = SDL_GetKeyboardState(nullptr);
         SDL_PumpEvents();
         if(keys[SDL_SCANCODE_LEFT]){
             focus = 1;

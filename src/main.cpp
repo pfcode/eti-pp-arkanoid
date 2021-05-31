@@ -1,10 +1,8 @@
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
+#include <cmath>
+#include <cstdio>
 #include <iostream>
 #include "render.h"
-#include "map.h"
-#include <SDL2/SDL.h>
+#include "defines.h"
 
 using namespace std;
 
@@ -36,7 +34,7 @@ int gameLoop(Map *map, Render *render){
 				}
 			}
 		}
-		const Uint8 *keys = SDL_GetKeyboardState(NULL);
+		const Uint8 *keys = SDL_GetKeyboardState(nullptr);
 		SDL_PumpEvents();
 		SDL_PollEvent(&event);
 		if(keys[SDL_SCANCODE_ESCAPE] || event.type == SDL_QUIT){
@@ -57,7 +55,7 @@ int gameLoop(Map *map, Render *render){
 }
 
 int main(int argc, char **argv) {
-	srand(time(NULL));
+	srand(time(nullptr));
 	Map *map = new Map();
 	Render *render = new Render(map);
 	bool newGame = true;

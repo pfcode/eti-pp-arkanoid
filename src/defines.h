@@ -1,16 +1,26 @@
+// SDL2
+#ifdef WIN32
+    #include <SDL.h>
+#else
+    #include <SDL2/SDL.h>
+#endif
+
+// Constants
+#define PI 3.14
+
 // General
 #define INIT_WIDTH 640
 #define INIT_HEIGHT 480
 #define WINDOW_TITLE "Arkanoid - 155059"
 #define DEBUG_MODE 0
 #define LIVES 3
-#define LEVEL_FILE "levels.txt"
+#define LEVEL_FILE "res/levels.txt"
 
 // Style & resources
 #define ABSOLUTE_BACKGROUND 0x222222
-#define RESOURCE_CHARSET "./res/cs8x8.bmp"
-#define RESOURCE_TILESET "./res/tileset.bmp"
-#define RESOURCE_BACKGROUND "./res/drums.bmp"
+#define RESOURCE_CHARSET "res/cs8x8.bmp"
+#define RESOURCE_TILESET "res/tileset.bmp"
+#define RESOURCE_BACKGROUND "res/drums.bmp"
 
 // Block settings
 #define BLOCKS_W 24
