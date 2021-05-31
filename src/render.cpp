@@ -8,26 +8,30 @@ using namespace std;
 Render::Render(Map *_map){
     map = _map;
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0){
         printf("[ERROR]\tSDL_Init: %s\n", SDL_GetError());
         delete this;
         return;
     }
 
+
     int rc = SDL_CreateWindowAndRenderer(INIT_WIDTH, INIT_HEIGHT, 0,
             &window, &renderer);
+
     if(rc != 0) {
         SDL_Quit();
         printf("SDL_CreateWindowAndRenderer error: %s\n", SDL_GetError());
         delete this;
         return;
-    };
+    }
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(renderer, INIT_WIDTH, INIT_HEIGHT);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
     SDL_SetWindowTitle(window, WINDOW_TITLE);
+
+    printf("xd\n");
 
 
     screen = SDL_CreateRGBSurface(0, INIT_WIDTH, INIT_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
