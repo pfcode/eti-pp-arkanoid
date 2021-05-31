@@ -31,9 +31,6 @@ Render::Render(Map *_map){
 
     SDL_SetWindowTitle(window, WINDOW_TITLE);
 
-    printf("xd\n");
-
-
     screen = SDL_CreateRGBSurface(0, INIT_WIDTH, INIT_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
     scrtex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, INIT_WIDTH, INIT_HEIGHT);
 

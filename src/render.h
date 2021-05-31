@@ -8,9 +8,9 @@ class Render{
 private:
     // General
     Map *map;
-    int lastFPSCalc;
-    int framesInSec;
-    int fps;
+    int lastFPSCalc = 0;
+    int framesInSec = 0;
+    int fps = 0;
     void calcFPS();
 
     // SDL General
