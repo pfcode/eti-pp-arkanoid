@@ -33,13 +33,13 @@
 // Ball settings
 #define BALL_W 8
 #define BALL_H 8
-#define BALL_SPEED 0.8
-#define BALL_MAX_SPEED 1.3
+#define BALL_SPEED 0.4
+#define BALL_MAX_SPEED 1.2
 #define MAX_BALLS 30
 #define ACCELERATE_ON_BOUNCE 0.01
 
 // Palette settings
-#define PALETTE_SPEED 2
+#define PALETTE_SPEED 1
 #define PALETTE_SW 48       // Small palette width
 #define PALETTE_SH 8        // Small palette height
 #define PALETTE_BW 96       // Big palette width
