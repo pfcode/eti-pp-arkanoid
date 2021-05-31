@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.19)
 project(ETIPPArkanoid)
 
 set(CMAKE_CXX_STANDARD 14)
+set(SOURCE_FILES src/main.cpp src/render.cpp src/map.cpp)
 
 IF(MSVC)
     set(SDL2_DIR "${PROJECT_SOURCE_DIR}/lib/SDL2-2.0.14")
@@ -13,5 +14,11 @@ ELSE()
 ENDIF()
 
 include_directories(${SDL2_INCLUDE_LIBS})
-add_executable(ETIPPArkanoid src/main.cpp src/render.cpp src/map.cpp)
-target_link_libraries(ETIPPArkanoid ${SDL2_LIBRARIES})
+
+IF(MSVC)
+    add_executable(${PROJECT_NAME} WIN32 ${SOURCE_FILES})
+ELSE()
+    add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+ENDIF()
+
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})

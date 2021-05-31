@@ -55,34 +55,34 @@ int gameLoop(Map *map, Render *render){
 }
 
 int main(int argc, char **argv) {
-	srand(time(nullptr));
-	Map *map = new Map();
-	Render *render = new Render(map);
-	bool newGame = true;
-	while(newGame){
-		map->setPalette(PALETTE_DEFAULT, PALETTE_SMALL, true);
-		if(!map->loadMap(LEVEL_FILE)){
-			printf("[ERROR]\tCannot open level file\n");
-			return -1;
-		}
-		switch(gameLoop(map, render)){
-			default:
-				return 0;
-			case GAME_OVER:
-				if(!render->dialogYesNo("Przegrales. Grasz jeszcze raz?")) {
-					newGame = false;
-				} else{
-					newGame = true;
-				}
-				break;
-			case GAME_END:
-				if(!render->dialogYesNo("To byl ostatni poziom. Grasz od poczatku?")) {
-					newGame = false;
-				} else{
-					newGame = true;
-				}
-				break;
-		}
-	}
-	return 0;
-};
+    srand(time(nullptr));
+    Map *map = new Map();
+    Render *render = new Render(map);
+    bool newGame = true;
+    while(newGame){
+        map->setPalette(PALETTE_DEFAULT, PALETTE_SMALL, true);
+        if(!map->loadMap(LEVEL_FILE)){
+            printf("[ERROR]\tCannot open level file\n");
+            return -1;
+        }
+        switch(gameLoop(map, render)){
+            default:
+                return 0;
+            case GAME_OVER:
+                if(!render->dialogYesNo("Przegrales. Grasz jeszcze raz?")) {
+                    newGame = false;
+                } else{
+                    newGame = true;
+                }
+                break;
+            case GAME_END:
+                if(!render->dialogYesNo("To byl ostatni poziom. Grasz od poczatku?")) {
+                    newGame = false;
+                } else{
+                    newGame = true;
+                }
+                break;
+        }
+    }
+    return 0;
+}
